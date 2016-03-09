@@ -13,6 +13,11 @@ const remember = require('gulp-remember');
 const path = require('path');
 const browserSync = require('browser-sync').create();
 const notify = require('gulp-notify');
+const nodeSass = require('node-sass');
+const sassLoader = require('sass-loader');
+const webpack = require('webpack');
+const svgSprite = require('gulp-svg-sprite');
+
 
 
 const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV == 'development'; // условия для того чтобы делать сборку для продакшена другой без лишних элементов
@@ -31,8 +36,29 @@ gulp.task('clean', function(){ //создаем таск для очишения
 });
 
 gulp.task('assets', function(){
-	return gulp.src('app/assets/**', {since: gulp.lastRun('assets')})
+	return gulp.src('app/assets/**/*.*', {since: gulp.lastRun('assets')})
 	.pipe(newer('build'))
+	.pipe(gulp.dest('build'));
+});
+
+gulp.task('sass:assets', function(){
+	return gulp.src('app/scss/**/*.{png,jpg}', {since: gulp.lastRun('sass:assets')})
+	.pipe(newer('build'))
+	.pipe(gulp.dest('build'));
+});
+
+gulp.task('sass:svg', function(){
+	return gulp.src('app/scss/**/*.svg')
+	.pipe(svgSprite({
+		mode: {
+			css: {
+				render: {
+					css: true
+				}
+			}
+		}
+	}))
+	.pipe(debug({title: 'svg'}))
 	.pipe(gulp.dest('build'));
 });
 
@@ -63,12 +89,13 @@ gulp.task('serve', function(){
 
 
 
-gulp.task('build', gulp.series('clean', gulp.parallel('scss', 'assets'), 'pretty'));
+gulp.task('build', gulp.series('clean','sass:assets', gulp.parallel('scss', 'assets'), 'pretty'));
 
 
 gulp.task('watch', function(){
 	gulp.watch('app/scss/**/*.*', gulp.series('scss'));
 	gulp.watch('app/assets/**/*.*', gulp.series('assets'));
+	gulp.watch('app/scss/**/*.{png,svg,jpg}', gulp.series('sass:assets'));
 });
 
 gulp.task('dev', gulp.series('build', gulp.parallel('watch','serve')));
