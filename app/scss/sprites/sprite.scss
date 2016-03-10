@@ -1,0 +1,14 @@
+%svg-common {
+	background: url("sprite.svg") no-repeat;
+}
+
+.svg-menu--octicons {
+	@extend %svg-common;
+	background-position: 0 0;
+}
+
+.svg-menu--octicons-dims {
+	width: 0px;
+	height: 0px;
+}
+

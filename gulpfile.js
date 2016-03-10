@@ -17,6 +17,10 @@ const nodeSass = require('node-sass');
 const sassLoader = require('sass-loader');
 const webpack = require('webpack');
 const svgSprite = require('gulp-svg-sprite');
+const cssnano = require('gulp-cssnano');
+const svgmin = require('gulp-svgmin');
+const imagemin = require('gulp-imagemin');
+const pngquant = require('imagemin-pngquant');
 
 
 
@@ -27,6 +31,10 @@ gulp.task('scss', function () {
   	.pipe(gulpif(isDevelopment, sourcemaps.init()))
     .pipe(scss().on('error', scss.logError))
     .on('error', notify.onError())
+    .pipe(autoprefixer(['last 2 versions', '> 5%', 'Firefox ESR']))
+    .pipe(remember('css'))
+	.pipe(concat('all.min.css'))
+	.pipe(cssnano())
     .pipe(gulpif(isDevelopment, sourcemaps.write()))
     .pipe(gulp.dest('build/css'));
 });
@@ -41,36 +49,43 @@ gulp.task('assets', function(){
 	.pipe(gulp.dest('build'));
 });
 
-gulp.task('sass:assets', function(){
-	return gulp.src('app/scss/**/*.{png,jpg}', {since: gulp.lastRun('sass:assets')})
-	.pipe(newer('build'))
-	.pipe(gulp.dest('build'));
-});
 
 gulp.task('sass:svg', function(){
 	return gulp.src('app/scss/**/*.svg')
+	.pipe(svgmin())
 	.pipe(svgSprite({
 		mode: {
 			css: {
-				render: {
-					css: true
+				dest: '',
+				bust: '',
+				sprite: 'sprite.svg',
+				layout: 'vertical',
+				dimension: true,
+
+				render:      {
+					scss : {
+					dest: 'sprite.scss'
 				}
+			  }
 			}
 		}
 	}))
 	.pipe(debug({title: 'svg'}))
-	.pipe(gulp.dest('build'));
+	.pipe(gulpif('*.scss', gulp.dest('app/scss/sprites'), gulp.dest('app/img/sprites')));
 });
 
-gulp.task('pretty', function () {
-	return gulp.src('build/css/**/*.css', {since: gulp.lastRun('pretty')})
-		.pipe(sourcemaps.init())
-		.pipe(autoprefixer())
-		.pipe(remember('css'))
-		.pipe(concat('all.css'))
-		.pipe(sourcemaps.write('.'))
-		.pipe(gulp.dest('build/css'));
+gulp.task('imagemin', () => {
+	return gulp.src('app/img/**/*.*')
+		.pipe(newer('build/images'))
+		.pipe(imagemin({
+			progressive: true,
+			svgoPlugins: [{removeViewBox: false}],
+			use: [pngquant()]
+		}))
+		.pipe(gulp.dest('build/images'));
 });
+
+
 
 // gulp.task('watcher', function () {  //функция для отслеживания изменения в css файлах и для того чтобы удалять файлы
 // 	gulp.watch('build/css/**/*.css', gulp.series('pretty')).on('unlink', function(filepath) {
@@ -89,13 +104,14 @@ gulp.task('serve', function(){
 
 
 
-gulp.task('build', gulp.series('clean','sass:assets', gulp.parallel('scss', 'assets'), 'pretty'));
+gulp.task('build', gulp.series('clean','imagemin', gulp.parallel('scss', 'assets')));
 
 
 gulp.task('watch', function(){
 	gulp.watch('app/scss/**/*.*', gulp.series('scss'));
 	gulp.watch('app/assets/**/*.*', gulp.series('assets'));
-	gulp.watch('app/scss/**/*.{png,svg,jpg}', gulp.series('sass:assets'));
+	gulp.watch('app/img/**/*.*', gulp.series('imagemin'));
+
 });
 
 gulp.task('dev', gulp.series('build', gulp.parallel('watch','serve')));
