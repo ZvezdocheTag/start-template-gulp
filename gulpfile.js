@@ -21,10 +21,19 @@ const cssnano = require('gulp-cssnano');
 const svgmin = require('gulp-svgmin');
 const imagemin = require('gulp-imagemin');
 const pngquant = require('imagemin-pngquant');
+const jade = require('gulp-jade');
 
 
 
 const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV == 'development'; // условия для того чтобы делать сборку для продакшена другой без лишних элементов
+
+
+
+gulp.task('jade', function() {
+	return gulp.src('app/jade/*.jade')
+    .pipe(jade())
+    .pipe(gulp.dest('build'))
+});
 
 gulp.task('scss', function () {
   return gulp.src('app/scss/main.scss')
@@ -104,14 +113,15 @@ gulp.task('serve', function(){
 
 
 
-gulp.task('build', gulp.series('clean','imagemin', gulp.parallel('scss', 'assets')));
+gulp.task('build', gulp.series('clean','imagemin', gulp.parallel('scss', 'assets','jade')));
 
 
 gulp.task('watch', function(){
 	gulp.watch('app/scss/**/*.*', gulp.series('scss'));
 	gulp.watch('app/assets/**/*.*', gulp.series('assets'));
 	gulp.watch('app/img/**/*.*', gulp.series('imagemin'));
-
+	gulp.watch('app/jade/**/*.*', gulp.series('jade'));
+	
 });
 
 gulp.task('dev', gulp.series('build', gulp.parallel('watch','serve')));
