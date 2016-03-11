@@ -22,6 +22,9 @@ const svgmin = require('gulp-svgmin');
 const imagemin = require('gulp-imagemin');
 const pngquant = require('imagemin-pngquant');
 const jade = require('gulp-jade');
+const jadeInheritance = require('gulp-jade-inheritance');
+const uglify = require('gulp-uglify');
+const useref = require('gulp-useref');
 
 
 
@@ -31,6 +34,7 @@ const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV == 'developm
 
 gulp.task('jade', function() {
 	return gulp.src('app/jade/*.jade')
+	.pipe(jadeInheritance({basedir: 'app/jade'}))
     .pipe(jade())
     .pipe(gulp.dest('build'))
 });
@@ -94,6 +98,23 @@ gulp.task('imagemin', () => {
 		.pipe(gulp.dest('build/images'));
 });
 
+gulp.task('js', function() {
+  return gulp.src('app/js/main.js')
+  	.pipe(gulpif(isDevelopment, sourcemaps.init()))
+    .pipe(remember('js'))
+	.pipe(concat('main.js'))
+    .pipe(gulpif(isDevelopment,uglify()))
+    .pipe(gulpif(isDevelopment, sourcemaps.write()))
+    .pipe(gulp.dest('build/js'));
+});
+
+gulp.task('js:libs', function() {
+  return gulp.src('app/js/libs/**/*.js')
+    .pipe(remember('js'))
+    .pipe(gulpif(isDevelopment,uglify()))
+    .pipe(gulp.dest('build/js/libs'));
+});
+
 
 
 // gulp.task('watcher', function () {  //функция для отслеживания изменения в css файлах и для того чтобы удалять файлы
@@ -113,7 +134,7 @@ gulp.task('serve', function(){
 
 
 
-gulp.task('build', gulp.series('clean','imagemin', gulp.parallel('scss', 'assets','jade')));
+gulp.task('build', gulp.series('clean','sass:svg','imagemin', gulp.parallel('scss', 'assets','jade'),'js','js:libs'));
 
 
 gulp.task('watch', function(){
@@ -121,6 +142,7 @@ gulp.task('watch', function(){
 	gulp.watch('app/assets/**/*.*', gulp.series('assets'));
 	gulp.watch('app/img/**/*.*', gulp.series('imagemin'));
 	gulp.watch('app/jade/**/*.*', gulp.series('jade'));
+	gulp.watch('app/js/**/*.*', gulp.series('js'));
 	
 });
 
