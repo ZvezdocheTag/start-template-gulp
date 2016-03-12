@@ -74,11 +74,13 @@ figure {
 // Images
 
 img {
+  max-width: 100%;
   vertical-align: middle;
 }
 
 // Responsive images (ensure images don't scale beyond their parents)
 .img-responsive {
+
   @include img-responsive;
 }
 

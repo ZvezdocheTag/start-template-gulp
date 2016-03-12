@@ -57,7 +57,7 @@ gulp.task('clean', function(){ //создаем таск для очишения
 });
 
 gulp.task('assets', function(){
-	return gulp.src('app/assets/**/*.*', {since: gulp.lastRun('assets')})
+	return gulp.src(['app/assets/**/*.*','app/fonts/**/*.*',], {since: gulp.lastRun('assets')})
 	.pipe(newer('build'))
 	.pipe(gulp.dest('build'));
 });
@@ -98,15 +98,19 @@ gulp.task('imagemin', () => {
 		.pipe(gulp.dest('build/images'));
 });
 
+// Add concat all li
+
 gulp.task('js', function() {
-  return gulp.src('app/js/main.js')
+  return gulp.src([
+  	'app/js/main.js'
+  	])
   	.pipe(gulpif(isDevelopment, sourcemaps.init()))
     .pipe(remember('js'))
-	.pipe(concat('main.js'))
-    .pipe(gulpif(isDevelopment,uglify()))
+	.pipe(concat('main.js'))    // .pipe(uglify())
     .pipe(gulpif(isDevelopment, sourcemaps.write()))
     .pipe(gulp.dest('build/js'));
 });
+
 
 gulp.task('js:libs', function() {
   return gulp.src('app/js/libs/**/*.js')

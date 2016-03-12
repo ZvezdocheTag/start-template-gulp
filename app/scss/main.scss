@@ -1,23 +1,27 @@
-
-
-body {
-	background-color: #f00;
-	color: #FFF;
-}
 // Core variables and mixins
 @import "bootstrap/_variables";
 @import "bootstrap/_mixins";
 @import "bootstrap/_grid";
-@import "new/variables";
-
-
 // Reset and dependencies
 @import "bootstrap/normalize";
+// Core CSS
+@import "bootstrap/scaffolding";
+
 // @import "bootstrap/print";
 // @import "bootstrap/glyphicons";
 
-// Core CSS
-@import "bootstrap/scaffolding";
+//PROJECT
+
+@import "new/variables";
+
+
+
+
+
+
+// BOOTSTRAP 
+
+
 // @import "bootstrap/type";
 // @import "bootstrap/code";
 // @import "bootstrap/grid";
