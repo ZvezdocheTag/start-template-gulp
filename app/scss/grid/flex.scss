@@ -1,0 +1,63 @@
+.flex {
+	display: flex;
+	flex-flow: row wrap;
+	margin: 0 auto 0 auto;
+    align-items: stretch;
+}
+
+.fcol {
+	box-sizing: border-box;
+	flex: 1;
+}
+
+.fcol--top {
+  align-self: flex-start;
+}
+
+.fcol--middle {
+  align-self: center;
+}
+
+.fcol--bottom {
+  align-self: flex-end;
+}
+
+.fcol--stretch {
+  align-self: stretch;
+}
+
+.is-half  {
+	flex: 2;
+}
+.is-third  {
+	flex: 3;
+}
+.is-fourth  {
+	flex: 4;
+}
+
+.flex-300 {
+	flex: 300px;
+}
+
+// Mixins for width calculation.
+@mixin partial-size($size, $columns, $gutter) {
+  width: calc(#{(($size / $columns) * 100)+"%"} - #{$gutter});
+
+  .mdl-grid--no-spacing > & {
+    width: #{(($size / $columns) * 100)+"%"};
+  }
+}
+
+@mixin full-size($gutter) {
+  @include partial-size(1, 1, $gutter);
+}
+
+@mixin offset-size($size, $columns, $gutter) {
+  margin-left: calc(#{(($size / $columns) * 100)+"%"} + #{$gutter / 2});
+
+  .mdl-grid.mdl-grid--no-spacing > & {
+    margin-left: #{(($size / $columns) * 100)+"%"};
+  }
+}
+
