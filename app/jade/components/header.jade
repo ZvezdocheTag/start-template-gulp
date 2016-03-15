@@ -1,10 +1,35 @@
 header.p-header
 	div.container
 		div.row
-			div.col-md-4
-				h1 Its imposible
-				p.slogan.
+			div.col-md-3
+				a.logo(href="#")
+					img.logo__img(src="", alt="")
+				div.slogan.
 					possible
-			div.col-md-8
-				div.green.
-					fsfafd
+			div.col-md-9
+				.row
+					.col-md-4
+						.p-header__form
+							form
+								input(type="text")
+								input(type="text")
+								button(type="submit").
+									log in
+					.col-md-8.p-header__menu
+						nav
+							ul.menu
+								li.menu__item
+									a.menu__link.
+										main
+								li.menu__item
+									a.menu__link.
+										about
+								li.menu__item
+									a.menu__link.
+										contact
+								li.menu__item
+									a.menu__link.
+										portfolio
+								li.menu__item
+									a.menu__link.
+										shop

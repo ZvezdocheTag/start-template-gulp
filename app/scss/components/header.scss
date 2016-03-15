@@ -1,0 +1,63 @@
+.p-header {
+	background-color: #fff;
+	margin-bottom: 50px;
+	padding-top: 20px;
+	
+	&__menu {
+
+	}
+}
+
+.logo {
+	display: block;
+	width: 50px;
+	height: 50px;
+	background-color: #333;
+	-webkit-border-radius: 50%;
+	        border-radius: 50%;
+}
+
+
+// MENU
+
+.menu {
+	margin: 0;
+	padding-left: 0;
+		border-radius: 0 5px 5px 0;
+	background-color: #3d3d3d;
+
+	
+	&__item {
+		display: inline-block;
+		
+	}
+	&__item + &__item {
+		
+		
+	}
+
+	&__link {
+		display: block;
+		font-size: 20px;
+		color: #FFF;
+		padding: 10px 20px;
+		cursor: pointer;
+		
+		&:hover {
+			background-color: #FFF;
+			color: #3d3d3d;
+			text-decoration: none;
+		}
+	}
+}
+
+//FORM
+
+input {
+	width: 50%;
+	height: 30px;
+	display: block;
+	margin-bottom: 5px;
+	
+	
+}
