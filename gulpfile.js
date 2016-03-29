@@ -64,7 +64,7 @@ gulp.task('assets', function(){
 
 
 gulp.task('sass:svg', function(){
-	return gulp.src('app/scss/**/*.svg')
+	return gulp.src('app/img/svg/*.svg')
 	.pipe(svgmin())
 	.pipe(svgSprite({
 		mode: {
