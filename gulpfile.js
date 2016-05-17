@@ -26,11 +26,7 @@ const jadeInheritance = require('gulp-jade-inheritance');
 const uglify = require('gulp-uglify');
 const useref = require('gulp-useref');
 
-
-
 const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV == 'development'; // условия для того чтобы делать сборку для продакшена другой без лишних элементов
-
-
 
 gulp.task('jade', function() {
 	return gulp.src('app/jade/*.jade')
@@ -61,7 +57,6 @@ gulp.task('assets', function(){
 	.pipe(newer('build'))
 	.pipe(gulp.dest('build'));
 });
-
 
 gulp.task('sass:svg', function(){
 	return gulp.src('app/img/svg/*.svg')
