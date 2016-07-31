@@ -2,13 +2,23 @@
 	background: url("sprite.svg") no-repeat;
 }
 
-.svg-menu--octicons {
+.svg-envelop {
 	@extend %svg-common;
 	background-position: 0 0;
 }
 
-.svg-menu--octicons-dims {
-	width: 0px;
-	height: 0px;
+.svg-envelop-dims {
+	width: 16px;
+	height: 16px;
+}
+
+.svg-price-tag {
+	@extend %svg-common;
+	background-position: 0 100%;
+}
+
+.svg-price-tag-dims {
+	width: 16px;
+	height: 16px;
 }
 
